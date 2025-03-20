@@ -8,9 +8,8 @@ include('../middleware/adminMiddleware.php');
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-primary">
-                    <h4 class="text-white">Danh mục
-                    <a href="add-category.php" class="btn btn-info float-end">Thêm danh mục</a>
-
+                    <h4 class="text-white">Phân loại
+                    <a href="add-brand.php" class="btn btn-info float-end">Thêm phân loại</a>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -19,15 +18,15 @@ include('../middleware/adminMiddleware.php');
                             <tr>
 
                                 <!-- <th>ID</th> -->
-                                <th>Tên danh mục</th>
+                                <th>Tên phân loại</th>
                                 <th>Tùy chỉnh</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $category = getAll("category");
-                            if (mysqli_num_rows($category) > 0) {
-                                foreach ($category as $item) {
+                            $brand = getAll("brand");
+                            if (mysqli_num_rows($brand) > 0) {
+                                foreach ($brand as $item) {
                                     ?>
                                     <tr>
                                         <!-- <td>
@@ -37,14 +36,10 @@ include('../middleware/adminMiddleware.php');
                                             <?= $item['name'] ?>
                                         </td>
                                         <td>
-                                            <img src="../uploads/<?= $item['image'] ?>" width="50px" height="50px" alt="<?= $item['name'] ?>">
-                                            
-                                        </td>
-                                        <td>
-                                            <a href="edit-category.php?id=<?= $item['id']; ?>" class="btn btn-primary">Sửa</a>
+                                            <a href="edit-brand.php?id=<?= $item['id']; ?>" class="btn btn-primary">Sửa</a>
                                            <form action="code.php" method="POST">
-                                                <input type="hidden" name="category_id" value="<?= $item['id'] ?>">
-                                                <button type="submit" class="btn btn-danger" name="delete_category">Xóa</button>
+                                                <input type="hidden" name="brand_id" value="<?= $item['id'] ?>">
+                                                <button type="submit" class="btn btn-danger" name="delete_brand">Xóa</button>
                                            </form>
                                         </td>
 
@@ -52,7 +47,7 @@ include('../middleware/adminMiddleware.php');
                                     <?php
                                 }
                             } else {
-                                echo "Không có danh mục";
+                                echo "Không có phân loại";
                             }
                             ?>
 

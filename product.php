@@ -1,105 +1,82 @@
 <?php
- session_start();
-
-include('function/userfunctions.php');
 include('includes/header.php');
+include('../middleware/adminMiddleware.php');
 
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h4 class="text-white">Sản phẩm
+                    <a href="add-product.php" class="btn btn-info float-end">Thêm sản phẩm</a>
+                    </h4>
+                </div>
+                <div class="card-body" id="product_table">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
 
-
-if (isset($_GET['category'])) {
-    $category_id = $_GET['category'];
-
-    // echo $category_id;
-// $product_get_cid = getID('product',$category_id);
-// $product_get_cid_run = mysqli_fetch_array($product_get_cid);
-//lấy tên cho thằng dưới
-    $category_name = getID('category', $category_id);
-    $category_name_run = mysqli_fetch_array($category_name);
-
-
-    if ($category_name_run) {
-        ?>
-
-        <div class="py-3 bg-primary">
-            <div class="container">
-                <h6 class="text-white">
-                    <a class="text-white" href="index.php">
-                        Home /
-                    </a>
-                    <a class="text-white" href="category.php">
-                        Danh Mục /
-                    </a>
-                    <?= $category_name_run['name'] ?>
-
-
-
-                </h6>
-            </div>
-        </div>
-
-        <div class="py-5">
-            <div class="container">
-                <div class="col-md-12">
-                    <h1>
-                        <?= $category_name_run['name'] ?>
-                    </h1>
-                    <hr>
-                    <div class="row">
-
-
-                        <?php
-                        $product = getProductbyCid('product', $category_id);
-                        if (mysqli_num_rows($product) > 0) {
-                            foreach ($product as $item) {
-
-                                ?>
-                                <div class="col-md-3 mb-2">
-                                    <a href="product-view.php?productid=<?= $item['id'] ?>">
-
-                                        <div class="card shadow category-card">
-                                            <div class="card-body">
-
-                                                <img src="uploads/<?= $item['image'] ?>" alt="" class="w-100" style='height: 160px;'>
-                                                <h4>
-                                                    <?= $item['productName']; ?>
-
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <?php
-
-                            }
-                        } else {
-                            ?>
-                            <div class=" text-center " style=" height: 100vh;">
-                                <h4 class=" text-info fs-2 fw-bold">Danh mục không có sản phẩm!</h4>
-                            </div>
+                                <!-- <th>ID</th> -->
+                                <th>Tên sản phẩm</th>
+                                <th>Hình ảnh</th>
+                                <th>Giá (VNĐ)</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Tùy chỉnh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <?php
-                            // echo "Danh mục không có sản phẩm";
-                        }
+                            $product = getAll("product");
+                            if (mysqli_num_rows($product) > 0) {
+                                foreach ($product as $item) {
+                                    ?>
+                                    <tr>
+                                        <!-- <td>
+                                            <?= $item['id'] ?>
+                                        </td> -->
+                                        <td>
+                                            <?= $item['productName'] ?>
+                                        </td>
+                                  
+                                        <td>
+                                            <img src="../uploads/<?= $item['image'] ?>" width="50px" height="50px" alt="<?= $item['productName'] ?>">
+                                            
+                                        </td>
+                                        <td>
+                                        <?= number_format($item['price'], 0, ',', '.') ?> 
+                                            <!-- <?= $item['price'] ?> -->
+                                        </td>
+                                        <td>
+                                            <?= $item['quantity'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $item['trending'] == '1' ? "Nổi bật":"Không nổi bật" ?>
+                                        </td>
+                                        <td>
+                                            <a href="edit-product.php?id=<?= $item['id']; ?>" class="btn btn-primary">Sửa</a>
+                                            <input type="hidden" name = product_id value=<?= $item['id'] ?>>
+                                            <button type="button" class="btn btn-danger delete_product_btn" value="<?= $item['id'] ?>">Xóa</button>
+                                        </td>
+                                
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                echo "Không có danh mục";
+                            }
+                            ?>
 
-                        ?>
-
-
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </div>
+    </div>
+</div>
 
 
-
-
-        <?php
-
-    } else {
-        echo "Đừng có phá dùm";
-    }
-} else {
-    echo "Danh mục không có id đó đừng có cố chấp!";
-}
-
-include('includes/footer.php'); ?>
+<?php
+include('includes/footer.php');
+?>
